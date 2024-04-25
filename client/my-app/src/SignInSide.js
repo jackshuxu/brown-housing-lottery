@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import backgroundImage from "./photos/brownuniversity.png";
+import { GoogleButton } from 'react-google-button'
+import {UserAuth} from './context/AuthContext';
 
 function Copyright(props) {
   return (
@@ -32,13 +34,24 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const { googleSignIn, logOut } = UserAuth();
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const response = await googleSignIn();
+      const userEmail = response.user.email || "";
+
+      // Check if the email ends with the allowed domain
+      if (userEmail.endsWith("@brown.edu")) {
+        console.log(response.user.uid);
+      } else {
+        // User is not allowed, sign them out and show a message
+        await logOut();
+        console.log("User not allowed. Signed out.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -77,54 +90,17 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            <GoogleButton onClick={
+              handleGoogleSignIn}/>
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
