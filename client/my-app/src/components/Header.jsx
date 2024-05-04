@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import "./Header.css";
 
 export default function Header() {
   const { logOut } = UserAuth();
@@ -11,30 +12,17 @@ export default function Header() {
 
   return (
     <header>
-      <h1> HOUSING LOTTERY (^з^)-☆ ( ͡° ͜ʖ ͡°) ( ˘ ³˘)♥ (* ^ ω ^) (.❛ ᴗ ❛.) </h1>
+      <h1> Bear Home (^з^)-☆ </h1>
       <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/">HOME</Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link to="/about">ABOUT</Link>
           </li>
           <li>
-            <Link to="/data">Data</Link>
-          </li>
-          <li>
-            <button
-              onClick={handleSignOut}
-              style={{
-                border: "none",
-                background: "none",
-                color: "blue",
-                cursor: "pointer",
-              }}
-            >
-              Sign Out
-            </button>
+            <button onClick={handleSignOut}>Sign Out</button>
           </li>
         </ul>
       </nav>

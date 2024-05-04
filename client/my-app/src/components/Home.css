@@ -1,0 +1,36 @@
+body {
+  background-color: #b27575;
+}
+
+.banner {
+  padding: 2rem;
+  margin-bottom: 0.9rem;
+  background-color: rgb(113, 56, 56);
+  display: flex;
+  justify-content: center;
+}
+
+.banner-text {
+  font-size: 2rem;
+  color: antiquewhite;
+  font-family: "Ubuntu Sans Mono", monospace;
+}
+
+.filter-banner {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  color: antiquewhite;
+  margin-left: 13px;
+}
+
+.filter-banner h1 {
+  margin-right: 20px;
+}
+
+.options {
+  font-family: "Ubuntu Sans Mono", monospace;
+  margin-right: 17px;
+  margin-left: 8px;
+  border-color: white;
+}
