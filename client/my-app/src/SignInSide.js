@@ -10,6 +10,7 @@ import backgroundImage3 from "./photos/brownuniversity3.jpg";
 import cuteBearImage from "./photos/cuteBear.png"
 import { GoogleButton } from 'react-google-button'
 import {UserAuth} from './context/AuthContext';
+import "./components/Header.css";
 
 const backgroundImages = [backgroundImage1, backgroundImage2, backgroundImage3];
 
@@ -48,6 +49,7 @@ export default function SignInSide() {
                 justifyContent: "center",
                 padding: 3,
                 height: "auto",
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
               }}
             >
               {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -58,25 +60,43 @@ export default function SignInSide() {
                 alt="Brown Bear Logo"
                 style={{
                   position: "relative",
-                  top: 0,
+                  top: -15,
                   left: 0,
                   width: "50%",
                   height: "50%",
-                  objectFit: "cover", // Covers the entire area of the paper
-                  opacity: 1, // Adjust opacity as needed
+                  objectFit: "cover",
+                  opacity: 1,
                 }}
               />
               <Typography
                 component="h1"
                 variant="h5"
-                sx={{fontWeight: 'bold'}}
+                sx={{
+                  fontSize: "2.5rem",
+                  fontWeight: "bold",
+                  fontFamily: '"Ubuntu Sans Mono", monospace',
+                  marginLeft: "1rem",
+                  marginTop: "-2rem",
+                }}
               >
-                Brown Housing Lottery
+                Bear Home
               </Typography>
               <GoogleButton
                 onClick={() => googleSignIn()}
-                style={{ width: "100%", marginTop: 20 }}
+                style={{ width: "100%", marginTop: 15 }}
               />
+              <Typography
+                component="h1"
+                variant="h8"
+                sx={{
+                  fontSize: "0.75rem",
+                  fontWeight: "bold",
+                  fontFamily: '"Ubuntu Sans Mono", monospace',
+                  marginTop: 1,
+                }}
+              >
+                Please sign in with your Brown email address!
+              </Typography>
             </Paper>
           </Grid>
         </Grid>
