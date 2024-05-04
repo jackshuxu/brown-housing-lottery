@@ -1,0 +1,9 @@
+.footer {
+  background-color: rgb(113, 56, 56);
+  font-family: sans-serif;
+  margin-top: 200px;
+  color: antiquewhite;
+  text-align: left;
+  padding: 3rem;
+  width: 100%;
+}

@@ -1,0 +1,51 @@
+header {
+  background-color: #b27575;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between; /* Align items horizontally with space between */
+  align-items: center;
+}
+
+header h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: "Ubuntu Sans Mono", monospace;
+  margin-left: 1rem;
+}
+
+nav ul {
+  font-family: "Ubuntu Sans Mono", monospace;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+nav ul li {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  color: rgb(87, 0, 29);
+}
+
+button {
+  font-family: "Ubuntu Sans Mono", monospace;
+  border: none;
+  background: rgb(227, 198, 198);
+  color: rgb(87, 0, 29);
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+
+button:hover {
+  text-decoration: underline;
+}
