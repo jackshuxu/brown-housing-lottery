@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CsvSearch.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.main.csv</a> &gt; <span class="el_source">CsvSearch.java</span></div><h1>CsvSearch.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.main.csv;
+
+import edu.brown.cs.student.main.csv.creatorfromrow.*;
+import java.io.*;
+import java.util.List;
+
+/**
+ * A class for searching through files based on a key word and optional column identifier
+ *
+ * @author Christina Peng
+ */
+public class CsvSearch {
+
+  private static CsvParser&lt;List&lt;String&gt;&gt; MY_PARSER;
+  private static CreatorFromRow&lt;List&lt;String&gt;&gt; MY_PARSED_OBJECT;
+
+<span class="fc" id="L17">  public CsvSearch(CsvParser&lt;List&lt;String&gt;&gt; parser, CreatorFromRow&lt;List&lt;String&gt;&gt; parsedObject) {</span>
+<span class="fc" id="L18">    MY_PARSER = parser;</span>
+<span class="fc" id="L19">    MY_PARSED_OBJECT = parsedObject;</span>
+<span class="fc" id="L20">  }</span>
+
+  /**
+   * Searches through a file for a target word
+   *
+   * @param filename name of the file to search
+   * @param toSearch target word being searched
+   * @throws IOException for failed or interrupted I/O operations
+   * @throws FactoryFailureException for rows that cannot be parsed into a CreatorFromRow object
+   */
+  public void search(String filename, String toSearch) throws IOException, FactoryFailureException {
+<span class="fc" id="L31">    tryOpenFile(filename);</span>
+<span class="fc" id="L32">    List&lt;List&lt;String&gt;&gt; rows = parseFile(filename);</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">    for (List&lt;String&gt; row : rows) {</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">      for (String word : row) {</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (word.equals(toSearch)) {</span>
+<span class="fc" id="L36">          System.out.println(row);</span>
+<span class="fc" id="L37">          break;</span>
+        }
+<span class="fc" id="L39">      }</span>
+<span class="fc" id="L40">    }</span>
+<span class="fc" id="L41">  }</span>
+
+  /**
+   * Searches through a file for a target word based on a column index
+   *
+   * @param filename name of the file to search
+   * @param toSearch target word being searched
+   * @param columnIndex integer indicating column index to search from
+   * @throws IOException for failed or interrupted I/O operations
+   * @throws FactoryFailureException for rows that cannot be parsed into a CreatorFromRow object
+   */
+  public void search(String filename, String toSearch, Integer columnIndex)
+      throws IOException, FactoryFailureException {
+<span class="fc" id="L54">    tryOpenFile(filename);</span>
+<span class="fc" id="L55">    List&lt;List&lt;String&gt;&gt; rows = parseFile(filename);</span>
+<span class="fc" id="L56">    searchByColumnIndex(rows, toSearch, columnIndex);</span>
+<span class="fc" id="L57">  }</span>
+
+  /**
+   * Searches through a file for a target word based on a header
+   *
+   * @param filename name of the file to search
+   * @param toSearch target word being searched
+   * @param header string indicating the header to search from
+   * @throws IOException for failed or interrupted I/O operations
+   * @throws FactoryFailureException for rows that cannot be parsed into a CreatorFromRow object
+   */
+  public void search(String filename, String toSearch, String header)
+      throws IOException, FactoryFailureException {
+<span class="fc" id="L70">    tryOpenFile(filename);</span>
+<span class="fc" id="L71">    List&lt;List&lt;String&gt;&gt; rows = parseFile(filename);</span>
+<span class="fc" id="L72">    List&lt;String&gt; firstRow = rows.get(0);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">    for (int i = 0; i &lt; firstRow.size(); i++) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">      if (firstRow.get(i).equals(header)) {</span>
+<span class="fc" id="L75">        searchByColumnIndex(rows, toSearch, i);</span>
+      }
+    }
+<span class="fc" id="L78">  }</span>
+
+  /**
+   * throws SecurityException if attempting to access a file that's not in the data directory
+   *
+   * @param filename name of the file to parse
+   * @throws SecurityException when file doesn't belong to data directory
+   * @throws IOException for failed or interrupted I/O operations
+   */
+  private void tryOpenFile(String filename) throws IOException {
+<span class="fc" id="L88">    File file = new File(filename);</span>
+<span class="fc" id="L89">    boolean fileInDataDirectory =</span>
+<span class="fc" id="L90">        file.getCanonicalPath().startsWith(System.getProperty(&quot;user.dir&quot;) + &quot;/data/&quot;);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">    if (!fileInDataDirectory) {</span>
+<span class="fc" id="L92">      throw new SecurityException(&quot;Error: attempting to access restricted file!&quot;);</span>
+    }
+<span class="fc" id="L94">  }</span>
+
+  /**
+   * parses a file into List&lt;List&lt;String&gt;&gt;
+   *
+   * @param filename name of the file to parse
+   * @throws IOException for failed or interrupted I/O operations
+   * @throws FactoryFailureException for rows that cannot be parsed into a CreatorFromRow object
+   */
+  public static List&lt;List&lt;String&gt;&gt; parseFile(String filename)
+      throws IOException, FactoryFailureException {
+<span class="fc" id="L105">    FileReader fileReader = new FileReader(filename);</span>
+<span class="fc" id="L106">    MY_PARSER = new CsvParser&lt;List&lt;String&gt;&gt;(fileReader, MY_PARSED_OBJECT);</span>
+<span class="fc" id="L107">    List&lt;List&lt;String&gt;&gt; rows = MY_PARSER.parse();</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">    if (rows.isEmpty()) {</span>
+<span class="nc" id="L109">      System.err.println(&quot;Note: This file is empty!&quot;);</span>
+    }
+<span class="fc" id="L111">    return rows;</span>
+  }
+
+  /**
+   * Searches through a file for a target word based on a column index
+   *
+   * @param file name of the file to search
+   * @param toSearch target word being searched
+   * @param columnIndex integer indicating column index to search from
+   * @throws IndexOutOfBoundsException for invalid column indexes
+   */
+  public static void searchByColumnIndex(
+      List&lt;List&lt;String&gt;&gt; file, String toSearch, Integer columnIndex) {
+    try {
+<span class="fc bfc" id="L125" title="All 2 branches covered.">      for (List&lt;String&gt; row : file) {</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (row.get(columnIndex).equals(toSearch)) {</span>
+<span class="fc" id="L127">          System.out.println(row);</span>
+        }
+<span class="fc" id="L129">      }</span>
+<span class="fc" id="L130">    } catch (IndexOutOfBoundsException e) {</span>
+<span class="fc" id="L131">      throw new IndexOutOfBoundsException(&quot;Error: searching using an invalid index!&quot;);</span>
+<span class="fc" id="L132">    }</span>
+<span class="fc" id="L133">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
