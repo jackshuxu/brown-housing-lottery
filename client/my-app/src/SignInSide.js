@@ -7,12 +7,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import backgroundImage1 from "./photos/brownuniversity.png";
 import backgroundImage2 from "./photos/brownuniversity2.jpg";
 import backgroundImage3 from "./photos/brownuniversity3.jpg";
+import backgroundImage4 from "./photos/brownuniversity4.jpg";
 import cuteBearImage from "./photos/cuteBear.png"
 import { GoogleButton } from 'react-google-button'
 import {UserAuth} from './context/AuthContext';
 import "./components/Header.css";
 
-const backgroundImages = [backgroundImage1, backgroundImage2, backgroundImage3];
+const backgroundImages = [backgroundImage1, backgroundImage2, backgroundImage3, backgroundImage4];
 
 const randomBackgroundImage =
   backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
