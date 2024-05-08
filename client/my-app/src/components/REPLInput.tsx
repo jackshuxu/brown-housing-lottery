@@ -5,14 +5,9 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  fetchAPILoad,
-  fetchAPIView,
-  fetchAPISearch,
-} from "./ServerHandler";
+import { fetchAPILoad, fetchAPIView, fetchAPISearch } from "./ServerHandler";
 import "../styles/main.css";
 import { ControlledInput } from "./ControlledInput";
-import { HistoryEntry } from "./REPL";
 import CSV from "./CSV";
 // FOR MOCK vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 export interface CSVProps {
@@ -20,6 +15,7 @@ export interface CSVProps {
   setLoadedFileData: Dispatch<SetStateAction<string[][]>>;
 }
 
+export type HistoryEntry = string | string[][];
 // Placeholder for loaded file name
 let loadedFile: string;
 
@@ -45,7 +41,6 @@ export interface REPLInputProps {
   history: HistoryEntry[];
   setHistory: Dispatch<SetStateAction<HistoryEntry[]>>;
 }
-
 
 /**
  * The REPLInput function component handles the input part of the REPL (Read-Eval-Print Loop) interface.
@@ -80,9 +75,6 @@ export function REPLInput(props: REPLInputProps) {
         handleSubmit(commandString);
         // Clear the input field
         setCommandString("");
-      } else if (event.key === "m" && event.ctrlKey) {
-        event.preventDefault();
-        changeMode([]);
       } else if (event.key === "q" && event.ctrlKey && !event.shiftKey) {
         // Focus on input field on Ctrl + Q
         event.preventDefault();
@@ -135,17 +127,9 @@ export function REPLInput(props: REPLInputProps) {
       const output = await commandRegistry[command](args);
       const formattedEntry = `Command: ${commandString}\n${output.toString()}`;
       props.setHistory([...props.history, formattedEntry]);
-    } else {
-      const formattedEntry =
-        props.mode === "verbose"
-          ? `Command: ${commandString}\n${"Command not found"}`
-          : "Command not found";
-      props.setHistory([...props.history, formattedEntry]);
     }
     setCommandString("");
   }
-
-
 
   /**
    * Definition of REPL function for loading a given file from local computer
@@ -160,10 +144,9 @@ export function REPLInput(props: REPLInputProps) {
         resolve("Invalid File (the file must be a csv file)");
       }
       try {
-        if (props.mockMode) {
-          loadedFile = args[0];
-          resolve(CSV.loadCSV(loadedFile));
-        }
+        loadedFile = args[0];
+        resolve(CSV.loadCSV(loadedFile));
+
         // Fetch the API result and wait for the response
         const result = await fetchAPILoad(filepath);
         // Resolve the promise with the result
@@ -181,12 +164,9 @@ export function REPLInput(props: REPLInputProps) {
   let viewFile: REPLFunction = function (args: Array<string>) {
     return new Promise(async (resolve, reject) => {
       try {
-        if (props.mockMode) {
-          if (loadedFile == args[0]) {
-            resolve(CSV.viewCSV(loadedFile));
-          } else {
-            resolve("Please load file before attempting to view.");
-          }
+        if (loadedFile == args[0]) {
+          resolve(CSV.viewCSV(loadedFile));
+          resolve("Please load file before attempting to view.");
         } else {
           if (args.length != 0) {
             resolve("Invalid Command (view must take in no arguments)");
@@ -212,84 +192,23 @@ export function REPLInput(props: REPLInputProps) {
         );
       }
       try {
-        if (props.mockMode) {
-          if (loadedFile !== args[0]) {
-            resolve("Cannot search in the current loaded file");
-          } else {
-            resolve(CSV.searchCSV(loadedFile, args[1], args[2]));
-          }
-        } else {
-          let searchValue: string = args[0];
-          let header: string = args[1];
-          // if the conditions meet then we will occupy the following arguments
-          let columnIdentifer: string = args.length >= 3 ? args[2] : "";
-          let columnType: string = args.length === 4 ? args[3] : "";
-          const result = await fetchAPISearch(
-            searchValue,
-            header,
-            columnIdentifer,
-            columnType
-          );
-          resolve(result);
-        }
+        let searchValue: string = args[0];
+        let header: string = args[1];
+        // if the conditions meet then we will occupy the following arguments
+        let columnIdentifer: string = args.length >= 3 ? args[2] : "";
+        let columnType: string = args.length === 4 ? args[3] : "";
+        const result = await fetchAPISearch(
+          searchValue,
+          header,
+          columnIdentifer
+        );
+        resolve(result);
       } catch (error) {
         reject(error);
       }
     });
   };
 
-  /**
-   * Defintiion of REPL fucntion for broadband data
-   */
-  let broadBand: REPLFunction = function (args: Array<string>) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        if (props.mockMode) {
-          const state = args[0];
-          const county = args[1];
-          // Check if the api contains the provided state and county
-          const entry = api.find(
-            (entry) => entry.state === state && entry.county === county
-          );
-
-          if (entry) {
-            // State and county with the associated broadband access percentage exist in the api
-            resolve(
-              `Broadband access percentage in ${county}, ${state}: ${entry.percentage}`
-            );
-          } else {
-            // State or county not found in the api, reject with an error message
-            resolve(`Data not found for ${county}, ${state}`);
-          }
-        } else {
-          // TODO : change the array to a string and then whnever something is between [adsad asdsa] URlify every thing in the space
-          const joinedArgs = args.join(" ");
-
-          // URLify content within square brackets
-          const urlifiedArgs = joinedArgs.replace(
-            /\[([^\]]+)\]/g,
-            (match, p1) => encodeURIComponent(p1)
-          );
-          // Extract state and county from the modified string
-          const [state, county] = urlifiedArgs.split(" ");
-
-          // must have 2 arguments
-          if (urlifiedArgs.length < 2) {
-            resolve(
-              "Invalid Command (broadband must take in 2 arguments <state> <county>)"
-            );
-          }
-          if (props.mockMode) {
-          } else {
-            const result = await fetchAPIBroadBand(state, county);
-            resolve(result);
-          }
-        }
-      } catch (error) {
-        reject(error);
-      }
-    });
-  };
   return (
     <div className="repl-input">
       <fieldset>
