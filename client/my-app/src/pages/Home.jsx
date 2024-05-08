@@ -19,7 +19,7 @@ export default function Home() {
     try {
       const data = await fetchAPIView();
       console.log("Filtered Data:", data); // Log the filtered data
-      //setFilteredData(data);
+      setFilteredData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -81,14 +81,7 @@ export default function Home() {
         {/* Filter button to trigger the data fetching */}
         <button onClick={handleFilterClick}>Filter</button>
         {/* Display the filtered data */}
-        <div>
-          <h2>Filtered Data</h2>
-          <ul>
-            {filteredData.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+        <div dangerouslySetInnerHTML={{ __html: filteredData }}></div>
       </div>
       <RoomBox />
       <RoomBox />
