@@ -39,7 +39,7 @@ public class SearchCsvHandler implements Route {
       if (header != null && target != null && !this.csvFile.isEmpty()) {
         List<String> firstRow = loadedFile.get(0);
         for (int i = 0; i < firstRow.size(); i++) {
-          if (firstRow.get(i).equals(header)) {
+          if (firstRow.get(i).toLowerCase().contains(header.toLowerCase())) {
             this.searchByColumnIndex(loadedFile, target, i, responseMap);
           }
         }
@@ -48,7 +48,7 @@ public class SearchCsvHandler implements Route {
       } else if (target != null && !this.csvFile.isEmpty()) {
         for (int i = 0; i < loadedFile.size(); i++) {
           for (String word : loadedFile.get(i)) {
-            if (word.equals(target)) {
+            if (word.toLowerCase().contains(target.toLowerCase())) {
               responseMap.put(String.valueOf(i), loadedFile.get(i));
               break;
             }
@@ -75,7 +75,7 @@ public class SearchCsvHandler implements Route {
       Map<String, Object> responseMap) {
     try {
       for (int i = 0; i < file.size(); i++) {
-        if (file.get(i).get(columnIndex).equals(toSearch)) {
+        if (file.get(i).get(columnIndex).contains(toSearch)) {
           responseMap.put(String.valueOf(i), file.get(i));
         }
       }
@@ -108,7 +108,7 @@ public class SearchCsvHandler implements Route {
   /** Response object to send if someone requested soup from an empty Menu */
   public record SoupNoRecipesFailureResponse(String response_type) {
     public SoupNoRecipesFailureResponse() {
-      this("No file found");
+      this("The value does not exist within your search parameters. Change the value, header, or column number.");
     }
 
     String serialize() {

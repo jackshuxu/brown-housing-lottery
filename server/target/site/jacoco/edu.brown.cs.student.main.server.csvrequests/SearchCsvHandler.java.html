@@ -39,7 +39,7 @@ public class SearchCsvHandler implements Route {
 <span class="nc bnc" id="L39" title="All 6 branches missed.">      if (header != null &amp;&amp; target != null &amp;&amp; !this.csvFile.isEmpty()) {</span>
 <span class="nc" id="L40">        List&lt;String&gt; firstRow = loadedFile.get(0);</span>
 <span class="nc bnc" id="L41" title="All 2 branches missed.">        for (int i = 0; i &lt; firstRow.size(); i++) {</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">          if (firstRow.get(i).equals(header)) {</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">          if (firstRow.get(i).toLowerCase().contains(header.toLowerCase())) {</span>
 <span class="nc" id="L43">            this.searchByColumnIndex(loadedFile, target, i, responseMap);</span>
           }
         }
@@ -48,11 +48,11 @@ public class SearchCsvHandler implements Route {
 <span class="nc bnc" id="L48" title="All 4 branches missed.">      } else if (target != null &amp;&amp; !this.csvFile.isEmpty()) {</span>
 <span class="nc bnc" id="L49" title="All 2 branches missed.">        for (int i = 0; i &lt; loadedFile.size(); i++) {</span>
 <span class="nc bnc" id="L50" title="All 2 branches missed.">          for (String word : loadedFile.get(i)) {</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (word.equals(target)) {</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (word.toLowerCase().contains(target.toLowerCase())) {</span>
 <span class="nc" id="L52">              responseMap.put(String.valueOf(i), loadedFile.get(i));</span>
 <span class="nc" id="L53">              break;</span>
             }
-<span class="nc" id="L55">          }</span>
+          }
         }
       }
 
@@ -75,13 +75,13 @@ public class SearchCsvHandler implements Route {
       Map&lt;String, Object&gt; responseMap) {
     try {
 <span class="nc bnc" id="L77" title="All 2 branches missed.">      for (int i = 0; i &lt; file.size(); i++) {</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (file.get(i).get(columnIndex).equals(toSearch)) {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (file.get(i).get(columnIndex).contains(toSearch)) {</span>
 <span class="nc" id="L79">          responseMap.put(String.valueOf(i), file.get(i));</span>
         }
       }
 <span class="nc" id="L82">    } catch (IndexOutOfBoundsException e) {</span>
 <span class="nc" id="L83">      throw new IndexOutOfBoundsException(&quot;Error: searching using an invalid index!&quot;);</span>
-<span class="nc" id="L84">    }</span>
+    }
 <span class="nc" id="L85">  }</span>
 
 <span class="nc" id="L87">  public record FileSuccessResponse(String response_type, Map&lt;String, Object&gt; responseMap) {</span>
@@ -108,7 +108,7 @@ public class SearchCsvHandler implements Route {
   /** Response object to send if someone requested soup from an empty Menu */
 <span class="nc" id="L109">  public record SoupNoRecipesFailureResponse(String response_type) {</span>
     public SoupNoRecipesFailureResponse() {
-<span class="nc" id="L111">      this(&quot;No file found&quot;);</span>
+<span class="nc" id="L111">      this(&quot;The value does not exist within your search parameters&quot;);</span>
 <span class="nc" id="L112">    }</span>
 
     String serialize() {

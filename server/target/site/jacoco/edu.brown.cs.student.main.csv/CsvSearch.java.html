@@ -32,12 +32,12 @@ public class CsvSearch {
 <span class="fc" id="L32">    List&lt;List&lt;String&gt;&gt; rows = parseFile(filename);</span>
 <span class="fc bfc" id="L33" title="All 2 branches covered.">    for (List&lt;String&gt; row : rows) {</span>
 <span class="fc bfc" id="L34" title="All 2 branches covered.">      for (String word : row) {</span>
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (word.equals(toSearch)) {</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (word.toLowerCase().contains(toSearch.toLowerCase())) {</span>
 <span class="fc" id="L36">          System.out.println(row);</span>
 <span class="fc" id="L37">          break;</span>
         }
-<span class="fc" id="L39">      }</span>
-<span class="fc" id="L40">    }</span>
+      }
+    }
 <span class="fc" id="L41">  }</span>
 
   /**
@@ -71,7 +71,7 @@ public class CsvSearch {
 <span class="fc" id="L71">    List&lt;List&lt;String&gt;&gt; rows = parseFile(filename);</span>
 <span class="fc" id="L72">    List&lt;String&gt; firstRow = rows.get(0);</span>
 <span class="fc bfc" id="L73" title="All 2 branches covered.">    for (int i = 0; i &lt; firstRow.size(); i++) {</span>
-<span class="fc bfc" id="L74" title="All 2 branches covered.">      if (firstRow.get(i).equals(header)) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">      if (firstRow.get(i).toLowerCase().contains(header.toLowerCase())) {</span>
 <span class="fc" id="L75">        searchByColumnIndex(rows, toSearch, i);</span>
       }
     }
@@ -123,13 +123,13 @@ public class CsvSearch {
       List&lt;List&lt;String&gt;&gt; file, String toSearch, Integer columnIndex) {
     try {
 <span class="fc bfc" id="L125" title="All 2 branches covered.">      for (List&lt;String&gt; row : file) {</span>
-<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (row.get(columnIndex).equals(toSearch)) {</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (row.get(columnIndex).toLowerCase().contains(toSearch.toLowerCase())) {</span>
 <span class="fc" id="L127">          System.out.println(row);</span>
         }
-<span class="fc" id="L129">      }</span>
+      }
 <span class="fc" id="L130">    } catch (IndexOutOfBoundsException e) {</span>
 <span class="fc" id="L131">      throw new IndexOutOfBoundsException(&quot;Error: searching using an invalid index!&quot;);</span>
-<span class="fc" id="L132">    }</span>
+    }
 <span class="fc" id="L133">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

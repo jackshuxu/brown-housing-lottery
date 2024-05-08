@@ -122,9 +122,9 @@ public class SearchTest {
     assertEquals(printedOutput, "");
   }
 
-  /** Search searches by the exact value and not substrings. */
+  /** Search searches by substrings. */
   @Test
-  public void testSearchByExactValue() throws IOException, FactoryFailureException {
+  public void testSearchBySubstrings() throws IOException, FactoryFailureException {
     CsvParser<List<String>> parser =
         new CsvParser<>(new StringReader("Billy, Bob, Joe, Had, A, Time"), row);
     CsvSearch searcher = new CsvSearch(parser, row);
@@ -132,14 +132,14 @@ public class SearchTest {
     System.setOut(System.out);
     String printedOutput = outputStream.toString();
 
-    assertFalse(
+    assertTrue(
         printedOutput.contains(
             "[8, White Non-Hispanic, 2020, 2020, 86463, 7051, Bristol County, RI, 05000US44001, bristol-county-ri]"));
   }
 
-  /** Search is case-sensitive. */
+  /** Search is case-insensitive. */
   @Test
-  public void testSearchCaseSensitive() throws IOException, FactoryFailureException {
+  public void testSearchCaseInsensitive() throws IOException, FactoryFailureException {
     CsvParser<List<String>> parser =
         new CsvParser<>(new StringReader("Billy, Bob, Joe, Had, A, Time"), row);
     CsvSearch searcher = new CsvSearch(parser, row);
@@ -147,7 +147,7 @@ public class SearchTest {
     System.setOut(System.out);
     String printedOutput = outputStream.toString();
 
-    assertFalse(
+    assertTrue(
         printedOutput.contains(
             "[1, White, 2020, 2020, 85359, 6432, Bristol County, RI, 05000US44001, bristol-county-ri]"));
   }

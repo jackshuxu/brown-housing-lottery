@@ -32,7 +32,7 @@ public class CsvSearch {
     List<List<String>> rows = parseFile(filename);
     for (List<String> row : rows) {
       for (String word : row) {
-        if (word.equals(toSearch)) {
+        if (word.toLowerCase().contains(toSearch.toLowerCase())) {
           System.out.println(row);
           break;
         }
@@ -71,7 +71,7 @@ public class CsvSearch {
     List<List<String>> rows = parseFile(filename);
     List<String> firstRow = rows.get(0);
     for (int i = 0; i < firstRow.size(); i++) {
-      if (firstRow.get(i).equals(header)) {
+      if (firstRow.get(i).toLowerCase().contains(header.toLowerCase())) {
         searchByColumnIndex(rows, toSearch, i);
       }
     }
@@ -123,7 +123,7 @@ public class CsvSearch {
       List<List<String>> file, String toSearch, Integer columnIndex) {
     try {
       for (List<String> row : file) {
-        if (row.get(columnIndex).equals(toSearch)) {
+        if (row.get(columnIndex).toLowerCase().contains(toSearch.toLowerCase())) {
           System.out.println(row);
         }
       }
