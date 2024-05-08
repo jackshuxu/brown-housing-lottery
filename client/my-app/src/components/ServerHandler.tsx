@@ -68,14 +68,29 @@ export function fetchAPIView(): Promise<string> {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      return response.json();
+      return response.json(); // Parsing JSON response
     })
     .then((responseObject) => {
-      if (!responseObject.data || !Array.isArray(responseObject.data)) {
-        throw new Error("Invalid data format");
+      if (!responseObject.responseMap) {
+        throw new Error("Invalid data format: responseMap not found");
       }
-      const dataArray = JSONtoTable(responseObject.data);
-      return dataArray;
+      let dataArray: any[] | undefined;
+      for (const key in responseObject.responseMap) {
+        if (
+          Object.prototype.hasOwnProperty.call(responseObject.responseMap, key)
+        ) {
+          const data = responseObject.responseMap[key];
+          if (Array.isArray(data)) {
+            dataArray = data;
+            break; // Stop searching once the data array is found
+          }
+        }
+      }
+      if (!dataArray) {
+        throw new Error("Invalid data format: data array not found");
+      }
+      const formattedData = JSONtoTable(dataArray); // Passing JSON data to JSONtoTable
+      return formattedData;
     })
     .catch((error) => "Error: " + error.message);
 }
@@ -88,14 +103,8 @@ export function fetchAPIView(): Promise<string> {
  * @param columnType
  * @returns
  */
-export function fetchAPISearch(
-  searchValue: string,
-  header: string,
-  columnIndex: string
-) {
-  return fetch(
-    `http://localhost:5556/searchcsv?target=${searchValue}&header=${header}&columnIndex=${columnIndex}`
-  )
+export function fetchAPISearch(building: string) {
+  return fetch(`http://localhost:5556/searchcsv?target=${building}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");

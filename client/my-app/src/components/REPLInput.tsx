@@ -197,11 +197,7 @@ export function REPLInput(props: REPLInputProps) {
         // if the conditions meet then we will occupy the following arguments
         let columnIdentifer: string = args.length >= 3 ? args[2] : "";
         let columnType: string = args.length === 4 ? args[3] : "";
-        const result = await fetchAPISearch(
-          searchValue,
-          header,
-          columnIdentifer
-        );
+        const result = await fetchAPISearch(searchValue);
         resolve(result);
       } catch (error) {
         reject(error);

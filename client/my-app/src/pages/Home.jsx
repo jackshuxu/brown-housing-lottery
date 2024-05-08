@@ -3,7 +3,11 @@ import Header from "../components/Header";
 import "../components/Home.css";
 import RoomBox from "../components/RoomBox.jsx";
 import Footer from "../components/Footer.jsx";
-import { fetchAPISearch, fetchAPILoad } from "../components/ServerHandler.tsx";
+import {
+  fetchAPISearch,
+  fetchAPILoad,
+  fetchAPIView,
+} from "../components/ServerHandler.tsx";
 
 export default function Home() {
   const [availability, setAvailability] = useState(""); // State to hold the availability value
@@ -13,9 +17,9 @@ export default function Home() {
 
   const handleFilterClick = async () => {
     try {
-      const data = await fetchAPISearch(building, "header", "columnIndex");
+      const data = await fetchAPIView();
       console.log("Filtered Data:", data); // Log the filtered data
-      setFilteredData(data);
+      //setFilteredData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
