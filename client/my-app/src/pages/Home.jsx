@@ -15,7 +15,7 @@ export default function Home() {
   const [roomType, setRoomType] = useState("any"); // State to hold the room type value
   const [filteredData, setFilteredData] = useState([]); // State to hold the filtered data
 
-  const handleFilterClick = async () => {
+  const handleViewClick = async () => {
     try {
       const data = await fetchAPIView();
       console.log("Filtered Data:", data); // Log the filtered data
@@ -79,7 +79,8 @@ export default function Home() {
           onChange={(e) => setBuilding(e.target.value)}
         />
         {/* Filter button to trigger the data fetching */}
-        <button onClick={handleFilterClick}>Filter</button>
+        <button onClick={handleViewClick}>View</button>
+        <button>Filter</button>
         {/* Display the filtered data */}
         <div dangerouslySetInnerHTML={{ __html: filteredData }}></div>
       </div>
