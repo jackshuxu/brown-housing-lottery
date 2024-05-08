@@ -21,7 +21,7 @@ public class Server {
 <span class="nc" id="L21">    Spark.port(port);</span>
 
 <span class="nc" id="L23">    after(</span>
-        (request, response) -&gt; {
+<span class="nc" id="L24">        (request, response) -&gt; {</span>
 <span class="nc" id="L25">          response.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</span>
 <span class="nc" id="L26">          response.header(&quot;Access-Control-Allow-Methods&quot;, &quot;*&quot;);</span>
 <span class="nc" id="L27">        });</span>
@@ -32,7 +32,7 @@ public class Server {
 <span class="nc" id="L32">      Spark.get(&quot;searchcsv&quot;, new SearchCsvHandler(this.loadedCsv));</span>
 <span class="nc" id="L33">    } catch (NullPointerException e) {</span>
 <span class="nc" id="L34">      new FileNotLoadedFailureResponse().serialize();</span>
-<span class="nc" id="L35">    }</span>
+    }
 <span class="nc" id="L36">    Spark.get(&quot;broadband&quot;, new AcsHandler());</span>
 
 <span class="nc" id="L38">    Spark.init();</span>

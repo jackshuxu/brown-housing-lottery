@@ -10,45 +10,45 @@ public class ViewCsvHandler implements Route {
 
   private final Map&lt;String, List&lt;List&lt;String&gt;&gt;&gt; csvFile;
 
-<span class="fc" id="L13">  public ViewCsvHandler(Map&lt;String, List&lt;List&lt;String&gt;&gt;&gt; loadedCsv) {</span>
-<span class="fc" id="L14">    this.csvFile = loadedCsv;</span>
-<span class="fc" id="L15">  }</span>
+<span class="nc" id="L13">  public ViewCsvHandler(Map&lt;String, List&lt;List&lt;String&gt;&gt;&gt; loadedCsv) {</span>
+<span class="nc" id="L14">    this.csvFile = loadedCsv;</span>
+<span class="nc" id="L15">  }</span>
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
     try {
-<span class="fc" id="L20">      Map&lt;String, Object&gt; responseMap = new HashMap&lt;&gt;();</span>
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">      if (!this.csvFile.isEmpty()) {</span>
-<span class="fc" id="L22">        String firstKey = this.csvFile.keySet().iterator().next();</span>
-<span class="fc" id="L23">        List&lt;List&lt;String&gt;&gt; firstValue = this.csvFile.get(firstKey);</span>
-<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (!firstValue.isEmpty()) {</span>
-<span class="fc" id="L25">          responseMap.put(firstKey, this.csvFile.get(firstKey));</span>
+<span class="nc" id="L20">      Map&lt;String, Object&gt; responseMap = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L21" title="All 2 branches missed.">      if (!this.csvFile.isEmpty()) {</span>
+<span class="nc" id="L22">        String firstKey = this.csvFile.keySet().iterator().next();</span>
+<span class="nc" id="L23">        List&lt;List&lt;String&gt;&gt; firstValue = this.csvFile.get(firstKey);</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">        if (!firstValue.isEmpty()) {</span>
+<span class="nc" id="L25">          responseMap.put(firstKey, this.csvFile.get(firstKey));</span>
         }
       }
-<span class="fc bfc" id="L28" title="All 2 branches covered.">      if (!responseMap.isEmpty()) {</span>
-<span class="fc" id="L29">        return new FileSuccessResponse(responseMap).serialize();</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">      if (!responseMap.isEmpty()) {</span>
+<span class="nc" id="L29">        return new FileSuccessResponse(responseMap).serialize();</span>
       } else {
-<span class="fc" id="L31">        System.out.println(&quot;nothing to view&quot;);</span>
-<span class="fc" id="L32">        response.status(204);</span>
-<span class="fc" id="L33">        return new NoCsvFailureResponse().serialize();</span>
+<span class="nc" id="L31">        System.out.println(&quot;nothing to view&quot;);</span>
+<span class="nc" id="L32">        response.status(204);</span>
+<span class="nc" id="L33">        return new NoCsvFailureResponse().serialize();</span>
       }
-<span class="fc" id="L35">    } catch (Exception e) {</span>
-<span class="fc" id="L36">      System.out.println(&quot;error&quot; + e);</span>
-<span class="fc" id="L37">      response.status(500);</span>
-<span class="fc" id="L38">      return new FileNotFoundFailureResponse().serialize();</span>
+<span class="nc" id="L35">    } catch (Exception e) {</span>
+<span class="nc" id="L36">      System.out.println(&quot;error&quot; + e);</span>
+<span class="nc" id="L37">      response.status(500);</span>
+<span class="nc" id="L38">      return new FileNotFoundFailureResponse().serialize();</span>
     }
   }
 
-<span class="fc" id="L42">  public record FileSuccessResponse(String response_type, Map&lt;String, Object&gt; responseMap) {</span>
+<span class="nc" id="L42">  public record FileSuccessResponse(String response_type, Map&lt;String, Object&gt; responseMap) {</span>
     public FileSuccessResponse(Map&lt;String, Object&gt; responseMap) {
-<span class="fc" id="L44">      this(&quot;success&quot;, responseMap);</span>
-<span class="fc" id="L45">    }</span>
+<span class="nc" id="L44">      this(&quot;success&quot;, responseMap);</span>
+<span class="nc" id="L45">    }</span>
 
     String serialize() {
       try {
-<span class="fc" id="L49">        Moshi moshi = new Moshi.Builder().build();</span>
-<span class="fc" id="L50">        JsonAdapter&lt;FileSuccessResponse&gt; adapter = moshi.adapter(FileSuccessResponse.class);</span>
-<span class="fc" id="L51">        return adapter.toJson(this);</span>
+<span class="nc" id="L49">        Moshi moshi = new Moshi.Builder().build();</span>
+<span class="nc" id="L50">        JsonAdapter&lt;FileSuccessResponse&gt; adapter = moshi.adapter(FileSuccessResponse.class);</span>
+<span class="nc" id="L51">        return adapter.toJson(this);</span>
 <span class="nc" id="L52">      } catch (JsonDataException e) {</span>
 <span class="nc" id="L53">        return new BadJsonFailureResponse().serialize();</span>
 <span class="nc" id="L54">      } catch (Exception e) {</span>
@@ -58,14 +58,14 @@ public class ViewCsvHandler implements Route {
     }
   }
 
-<span class="fc" id="L61">  public record NoCsvFailureResponse(String response_type) {</span>
+<span class="nc" id="L61">  public record NoCsvFailureResponse(String response_type) {</span>
     public NoCsvFailureResponse() {
-<span class="fc" id="L63">      this(&quot;error_datasource&quot;);</span>
-<span class="fc" id="L64">    }</span>
+<span class="nc" id="L63">      this(&quot;error_datasource&quot;);</span>
+<span class="nc" id="L64">    }</span>
 
     String serialize() {
-<span class="fc" id="L67">      Moshi moshi = new Moshi.Builder().build();</span>
-<span class="fc" id="L68">      return moshi.adapter(NoCsvFailureResponse.class).toJson(this);</span>
+<span class="nc" id="L67">      Moshi moshi = new Moshi.Builder().build();</span>
+<span class="nc" id="L68">      return moshi.adapter(NoCsvFailureResponse.class).toJson(this);</span>
     }
   }
 }

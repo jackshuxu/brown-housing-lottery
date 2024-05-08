@@ -108,12 +108,13 @@ public class SearchCsvHandler implements Route {
   /** Response object to send if someone requested soup from an empty Menu */
 <span class="nc" id="L109">  public record SoupNoRecipesFailureResponse(String response_type) {</span>
     public SoupNoRecipesFailureResponse() {
-<span class="nc" id="L111">      this(&quot;The value does not exist within your search parameters&quot;);</span>
-<span class="nc" id="L112">    }</span>
+<span class="nc" id="L111">      this(</span>
+<span class="nc" id="L112">          &quot;The value does not exist within your search parameters. Change the value, header, or column number.&quot;);</span>
+<span class="nc" id="L113">    }</span>
 
     String serialize() {
-<span class="nc" id="L115">      Moshi moshi = new Moshi.Builder().build();</span>
-<span class="nc" id="L116">      return moshi.adapter(SoupNoRecipesFailureResponse.class).toJson(this);</span>
+<span class="nc" id="L116">      Moshi moshi = new Moshi.Builder().build();</span>
+<span class="nc" id="L117">      return moshi.adapter(SoupNoRecipesFailureResponse.class).toJson(this);</span>
     }
   }
 }

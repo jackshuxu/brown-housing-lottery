@@ -108,7 +108,8 @@ public class SearchCsvHandler implements Route {
   /** Response object to send if someone requested soup from an empty Menu */
   public record SoupNoRecipesFailureResponse(String response_type) {
     public SoupNoRecipesFailureResponse() {
-      this("The value does not exist within your search parameters. Change the value, header, or column number.");
+      this(
+          "The value does not exist within your search parameters. Change the value, header, or column number.");
     }
 
     String serialize() {
