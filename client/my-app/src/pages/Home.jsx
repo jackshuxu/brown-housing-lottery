@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import "../components/Home.css";
 import RoomBox from "../components/RoomBox.jsx";
 import Footer from "../components/Footer.jsx";
-import { fetchAPISearch } from "../components/ServerHandler.tsx";
+import { fetchAPISearch, fetchAPILoad } from "../components/ServerHandler.tsx";
 
 export default function Home() {
   const [availability, setAvailability] = useState(""); // State to hold the availability value
@@ -13,15 +13,30 @@ export default function Home() {
 
   const handleFilterClick = async () => {
     try {
-      // Fetch data from the server based on the input values
-      const data = await fetchAPISearch(availability, building, roomType);
-
-      // Update the state with the filtered data
+      const data = await fetchAPISearch(building, "header", "columnIndex");
+      console.log("Filtered Data:", data); // Log the filtered data
       setFilteredData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  // Load file data when the component mounts
+  useEffect(() => {
+    const loadFileData = async () => {
+      try {
+        // Fetch file data from the server
+        await fetchAPILoad(
+          "/Users/kseniiadolgopolova/Desktop/Browncoursework/CS0320/brown-housing-lottery/server/data/Sheet 2-Housing.csv"
+        );
+        console.log("File data loaded successfully.");
+      } catch (error) {
+        console.error("Error loading file data:", error);
+      }
+    };
+
+    loadFileData(); // Call the function to load file data
+  }, []);
 
   return (
     <>

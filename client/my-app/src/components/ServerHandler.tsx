@@ -91,10 +91,10 @@ export function fetchAPIView(): Promise<string> {
 export function fetchAPISearch(
   searchValue: string,
   header: string,
-  columnIndex: string,
+  columnIndex: string
 ) {
   return fetch(
-    `http://localhost:5556/searchcsv?searchValue=${searchValue}&header=${header}&columnIndex=${columnIndex}`
+    `http://localhost:5556/searchcsv?target=${searchValue}&header=${header}&columnIndex=${columnIndex}`
   )
     .then((response) => {
       if (!response.ok) {
@@ -112,5 +112,3 @@ export function fetchAPISearch(
       throw error;
     });
 }
-
-
