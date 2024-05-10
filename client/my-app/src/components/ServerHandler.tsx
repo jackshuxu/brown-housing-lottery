@@ -118,6 +118,7 @@ export function fetchAPISearch(building: string) {
     })
     .catch((error) => {
       console.error("Error:", error);
+      console.log(building);
       throw error;
     });
 }

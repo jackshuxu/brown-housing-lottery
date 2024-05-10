@@ -3,21 +3,35 @@ import Header from "../components/Header";
 import "../components/Home.css";
 import RoomBox from "../components/RoomBox.jsx";
 import Footer from "../components/Footer.jsx";
+
 import {
   fetchAPISearch,
   fetchAPILoad,
   fetchAPIView,
 } from "../components/ServerHandler.tsx";
 
+
 export default function Home() {
   const [availability, setAvailability] = useState(""); // State to hold the availability value
   const [building, setBuilding] = useState(""); // State to hold the building value
-  const [roomType, setRoomType] = useState("any"); // State to hold the room type value
+  const [roomType, setRoomType] = useState(""); // State to hold the room type value
   const [filteredData, setFilteredData] = useState([]); // State to hold the filtered data
+  
 
+  // Fetch and set room data when "View" button is clicked
   const handleViewClick = async () => {
     try {
       const data = await fetchAPIView();
+      console.log("Room Data:", data); // Log the room data
+      setFilteredData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleFilterClick = async () => {
+    try {
+      const data = await fetchAPISearch(building);
       console.log("Filtered Data:", data); // Log the filtered data
       setFilteredData(data);
     } catch (error) {
@@ -80,7 +94,7 @@ export default function Home() {
         />
         {/* Filter button to trigger the data fetching */}
         <button onClick={handleViewClick}>View</button>
-        <button>Filter</button>
+        <button onClick={handleFilterClick}>Filter</button>
         {/* Display the filtered data */}
         <div dangerouslySetInnerHTML={{ __html: filteredData }}></div>
       </div>
