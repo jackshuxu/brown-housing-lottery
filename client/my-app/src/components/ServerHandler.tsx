@@ -59,10 +59,10 @@ export function fetchAPILoad(filepath: string): Promise<string> {
 
 /**
  * This function returns a Promise where we can extract the viewable
- * content from the CSV data
+ * content from the CSV data as an array of Room objects
  * @returns
  */
-export function fetchAPIView(): Promise<string> {
+export function fetchAPIView(): Promise<Room[]> {
   return fetch("http://localhost:5556/viewcsv")
     .then((response) => {
       if (!response.ok) {
@@ -74,26 +74,28 @@ export function fetchAPIView(): Promise<string> {
       if (!responseObject.responseMap) {
         throw new Error("Invalid data format: responseMap not found");
       }
-      let dataArray: any[] | undefined;
-      for (const key in responseObject.responseMap) {
-        if (
-          Object.prototype.hasOwnProperty.call(responseObject.responseMap, key)
-        ) {
-          const data = responseObject.responseMap[key];
-          if (Array.isArray(data)) {
-            dataArray = data;
-            break; // Stop searching once the data array is found
-          }
-        }
-      }
-      if (!dataArray) {
-        throw new Error("Invalid data format: data array not found");
-      }
-      const formattedData = JSONtoTable(dataArray); // Passing JSON data to JSONtoTable
-      return formattedData;
+      
+      // Accessing the array of arrays representing CSV rows
+      const csvData: any[][] = responseObject.responseMap[Object.keys(responseObject.responseMap)[0]];
+
+      // Parsing CSV rows into Room objects
+      const rooms: Room[] = csvData.slice(1).map((row: any[]) => ({
+        dormName: row[0],
+        roomNumber: row[3],
+        roomType: row[5],
+        buildingName: row[0] // Assuming building name is the same as dorm name
+      }));
+
+      console.log("Room Data:", rooms); // Log the room data
+      return rooms;
     })
-    .catch((error) => "Error: " + error.message);
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      throw error;
+    });
 }
+
+
 
 /**
  * This function returns a Promise to search for specific data in the CSV
@@ -118,6 +120,7 @@ export function fetchAPISearch(building: string) {
     })
     .catch((error) => {
       console.error("Error:", error);
+      console.log(building);
       throw error;
     });
 }
