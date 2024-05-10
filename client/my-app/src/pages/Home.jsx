@@ -10,13 +10,11 @@ import {
   fetchAPIView,
 } from "../components/ServerHandler.tsx";
 
-
 export default function Home() {
   const [availability, setAvailability] = useState(""); // State to hold the availability value
   const [building, setBuilding] = useState(""); // State to hold the building value
   const [roomType, setRoomType] = useState(""); // State to hold the room type value
   const [filteredData, setFilteredData] = useState([]); // State to hold the filtered data
-  
 
   // Fetch and set room data when "View" button is clicked
   const handleViewClick = async () => {
@@ -96,7 +94,11 @@ export default function Home() {
         <button onClick={handleViewClick}>View</button>
         <button onClick={handleFilterClick}>Filter</button>
         {/* Display the filtered data */}
-        <div dangerouslySetInnerHTML={{ __html: filteredData }}></div>
+        {/* Render room boxes using room data */}
+        {filteredData.map((room, index) => (
+          <RoomBox key={index} room={room} />
+        ))}
+        {/* <div dangerouslySetInnerHTML={{ __html: filteredData }}></div> */}
       </div>
       <RoomBox />
       <RoomBox />
